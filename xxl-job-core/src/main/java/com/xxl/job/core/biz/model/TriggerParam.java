@@ -3,26 +3,37 @@ package com.xxl.job.core.biz.model;
 import java.io.Serializable;
 
 /**
+ * 触发参数
  * Created by xuxueli on 16/7/22.
  */
 public class TriggerParam implements Serializable{
     private static final long serialVersionUID = 42L;
 
+    //任务id
     private int jobId;
 
+    //执行处理者名称
     private String executorHandler;
+    //执行参数
     private String executorParams;
+    //执行阻塞策略
     private String executorBlockStrategy;
+    //执行超时时间
     private int executorTimeout;
 
+    //任务id
     private long logId;
+    //任务时间
     private long logDateTime;
 
+    //类型
     private String glueType;
     private String glueSource;
     private long glueUpdatetime;
 
+    //广播分片id
     private int broadcastIndex;
+    //分片总数
     private int broadcastTotal;
 
 

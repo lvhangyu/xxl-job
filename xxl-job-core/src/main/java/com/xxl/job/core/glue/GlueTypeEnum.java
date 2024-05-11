@@ -5,12 +5,19 @@ package com.xxl.job.core.glue;
  */
 public enum GlueTypeEnum {
 
+    //
     BEAN("BEAN", false, null, null),
+    //java
     GLUE_GROOVY("GLUE(Java)", false, null, null),
+    //shell
     GLUE_SHELL("GLUE(Shell)", true, "bash", ".sh"),
+    //python
     GLUE_PYTHON("GLUE(Python)", true, "python", ".py"),
+    //php
     GLUE_PHP("GLUE(PHP)", true, "php", ".php"),
+    //nodejs
     GLUE_NODEJS("GLUE(Nodejs)", true, "node", ".js"),
+    //powerShell
     GLUE_POWERSHELL("GLUE(PowerShell)", true, "powershell", ".ps1");
 
     private String desc;

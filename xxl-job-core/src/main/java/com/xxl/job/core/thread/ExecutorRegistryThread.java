@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 注册线程
  * Created by xuxueli on 17/3/2.
  */
 public class ExecutorRegistryThread {
@@ -22,6 +23,8 @@ public class ExecutorRegistryThread {
     }
 
     private Thread registryThread;
+
+    //volatile 多个线程访问 存在工作缓存问题
     private volatile boolean toStop = false;
     public void start(final String appname, final String address){
 
@@ -35,6 +38,8 @@ public class ExecutorRegistryThread {
             return;
         }
 
+
+        //注册线程
         registryThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -42,9 +47,12 @@ public class ExecutorRegistryThread {
                 // registry
                 while (!toStop) {
                     try {
+                        //注册参数
                         RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                        //调度中心列表
                         for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
                             try {
+                                //注册
                                 ReturnT<String> registryResult = adminBiz.registry(registryParam);
                                 if (registryResult!=null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
                                     registryResult = ReturnT.SUCCESS;
@@ -66,6 +74,7 @@ public class ExecutorRegistryThread {
                     }
 
                     try {
+                        //停止30秒
                         if (!toStop) {
                             TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
                         }
@@ -76,7 +85,7 @@ public class ExecutorRegistryThread {
                     }
                 }
 
-                // registry remove
+                // registry remove 注册删除
                 try {
                     RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
                     for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {

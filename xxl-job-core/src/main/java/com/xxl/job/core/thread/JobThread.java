@@ -21,18 +21,23 @@ import java.util.concurrent.*;
 
 
 /**
+ * 任务线程
  * handler thread
  * @author xuxueli 2016-1-16 19:52:47
  */
 public class JobThread extends Thread{
 	private static Logger logger = LoggerFactory.getLogger(JobThread.class);
 
+	//
 	private int jobId;
+	//任务处理者
 	private IJobHandler handler;
+	//任务参数  同一个任务 可能有串行排队策略
 	private LinkedBlockingQueue<TriggerParam> triggerQueue;
 	private Set<Long> triggerLogIdSet;		// avoid repeat trigger for the same TRIGGER_LOG_ID
 
 	private volatile boolean toStop = false;
+	//停止原因
 	private String stopReason;
 
     private boolean running = false;    // if running job
@@ -162,11 +167,11 @@ public class JobThread extends Thread{
 							futureThread.interrupt();
 						}
 					} else {
-						// just execute
+						// just execute 直接执行
 						handler.execute();
 					}
 
-					// valid execute handle data
+					// valid execute handle data 任务处理结果
 					if (XxlJobContext.getXxlJobContext().getHandleCode() <= 0) {
 						XxlJobHelper.handleFail("job handle result lost.");
 					} else {
@@ -176,6 +181,7 @@ public class JobThread extends Thread{
 								:tempHandleMsg;
 						XxlJobContext.getXxlJobContext().setHandleMsg(tempHandleMsg);
 					}
+					// 任务处理完成 日志打印
 					XxlJobHelper.log("<br>----------- xxl-job job execute end(finish) -----------<br>----------- Result: handleCode="
 							+ XxlJobContext.getXxlJobContext().getHandleCode()
 							+ ", handleMsg = "
@@ -190,11 +196,12 @@ public class JobThread extends Thread{
 					}
 				}
 			} catch (Throwable e) {
+				//任务异常
 				if (toStop) {
 					XxlJobHelper.log("<br>----------- JobThread toStop, stopReason:" + stopReason);
 				}
 
-				// handle result
+				// handle result  异常结果
 				StringWriter stringWriter = new StringWriter();
 				e.printStackTrace(new PrintWriter(stringWriter));
 				String errorMsg = stringWriter.toString();

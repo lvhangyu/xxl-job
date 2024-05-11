@@ -3,15 +3,20 @@ package com.xxl.job.core.biz.model;
 import java.io.Serializable;
 
 /**
+ * 处理回调参数
  * Created by xuxueli on 17/3/2.
  */
 public class HandleCallbackParam implements Serializable {
     private static final long serialVersionUID = 42L;
 
+    //日志id
     private long logId;
+    //日志时间
     private long logDateTim;
 
+    //处理code
     private int handleCode;
+    //处理消息
     private String handleMsg;
 
     public HandleCallbackParam(){}

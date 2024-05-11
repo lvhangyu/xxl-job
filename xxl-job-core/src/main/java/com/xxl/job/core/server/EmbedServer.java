@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.*;
 
 /**
+ * 嵌套服务
  * Copy from : https://github.com/xuxueli/xxl-rpc
  *
  * @author xuxueli 2020-04-11 21:25
@@ -34,13 +35,16 @@ public class EmbedServer {
     private Thread thread;
 
     public void start(final String address, final int port, final String appname, final String accessToken) {
+        //biz对象
         executorBiz = new ExecutorBizImpl();
+        //创建线程
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 // param
                 EventLoopGroup bossGroup = new NioEventLoopGroup();
                 EventLoopGroup workerGroup = new NioEventLoopGroup();
+                //线程池
                 ThreadPoolExecutor bizThreadPool = new ThreadPoolExecutor(
                         0,
                         200,
@@ -53,6 +57,7 @@ public class EmbedServer {
                                 return new Thread(r, "xxl-job, EmbedServer bizThreadPool-" + r.hashCode());
                             }
                         },
+                        //拒绝策略
                         new RejectedExecutionHandler() {
                             @Override
                             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
@@ -60,7 +65,7 @@ public class EmbedServer {
                             }
                         });
                 try {
-                    // start server
+                    // start server nio服务启动
                     ServerBootstrap bootstrap = new ServerBootstrap();
                     bootstrap.group(bossGroup, workerGroup)
                             .channel(NioServerSocketChannel.class)
@@ -71,20 +76,21 @@ public class EmbedServer {
                                             .addLast(new IdleStateHandler(0, 0, 30 * 3, TimeUnit.SECONDS))  // beat 3N, close if idle
                                             .addLast(new HttpServerCodec())
                                             .addLast(new HttpObjectAggregator(5 * 1024 * 1024))  // merge request & reponse to FULL
+                                            //netty http请求处理服务
                                             .addLast(new EmbedHttpServerHandler(executorBiz, accessToken, bizThreadPool));
                                 }
                             })
                             .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-                    // bind
+                    // bind 绑定端口
                     ChannelFuture future = bootstrap.bind(port).sync();
 
                     logger.info(">>>>>>>>>>> xxl-job remoting server start success, nettype = {}, port = {}", EmbedServer.class, port);
 
-                    // start registry
+                    // start registry 开始注册
                     startRegistry(appname, address);
 
-                    // wait util stop
+                    // wait util stop 等待停止
                     future.channel().closeFuture().sync();
 
                 } catch (InterruptedException e) {
@@ -102,7 +108,9 @@ public class EmbedServer {
                 }
             }
         });
+        //守护进程
         thread.setDaemon(true);    // daemon, service jvm, user thread leave >>> daemon leave >>> jvm leave
+        //启动线程任务
         thread.start();
     }
 
@@ -121,13 +129,14 @@ public class EmbedServer {
     // ---------------------- registry ----------------------
 
     /**
+     * 嵌套处理, http服务
      * netty_http
      * <p>
      * Copy from : https://github.com/xuxueli/xxl-rpc
      *
      * @author xuxueli 2015-11-24 22:25:15
      */
-    public static class EmbedHttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+    private static class EmbedHttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         private static final Logger logger = LoggerFactory.getLogger(EmbedHttpServerHandler.class);
 
         private ExecutorBiz executorBiz;
@@ -140,6 +149,7 @@ public class EmbedServer {
             this.bizThreadPool = bizThreadPool;
         }
 
+        //
         @Override
         protected void channelRead0(final ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {
             // request parse

@@ -3,6 +3,7 @@ package com.xxl.job.core.biz.model;
 import java.io.Serializable;
 
 /**
+ * 日志参数
  * @author xuxueli 2020-04-11 22:27
  */
 public class LogParam implements Serializable {
@@ -16,8 +17,11 @@ public class LogParam implements Serializable {
         this.fromLineNum = fromLineNum;
     }
 
+    //日志时间
     private long logDateTim;
+    //任务id
     private long logId;
+    //行数
     private int fromLineNum;
 
     public long getLogDateTim() {

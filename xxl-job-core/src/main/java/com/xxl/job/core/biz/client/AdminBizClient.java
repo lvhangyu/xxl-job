@@ -9,6 +9,7 @@ import com.xxl.job.core.util.XxlJobRemotingUtil;
 import java.util.List;
 
 /**
+ * 调度中心api 客户端
  * admin api test
  *
  * @author xuxueli 2017-07-28 22:14:52

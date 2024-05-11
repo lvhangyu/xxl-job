@@ -21,6 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 触发回调线程
  * Created by xuxueli on 16/7/22.
  */
 public class TriggerCallbackThread {
@@ -32,6 +33,7 @@ public class TriggerCallbackThread {
     }
 
     /**
+     * 任务结果回调参数队列
      * job results callback queue
      */
     private LinkedBlockingQueue<HandleCallbackParam> callBackQueue = new LinkedBlockingQueue<HandleCallbackParam>();
@@ -43,7 +45,9 @@ public class TriggerCallbackThread {
     /**
      * callback thread
      */
+    //触发回调线程
     private Thread triggerCallbackThread;
+    //触发重试回调线程
     private Thread triggerRetryCallbackThread;
     private volatile boolean toStop = false;
     public void start() {

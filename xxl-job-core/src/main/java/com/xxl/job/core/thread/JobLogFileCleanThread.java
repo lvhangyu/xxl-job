@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 任务日志清理线程
  * job file clean thread
  *
  * @author xuxueli 2017-12-29 16:23:43
@@ -34,6 +35,7 @@ public class JobLogFileCleanThread {
             return;
         }
 
+        //启动线程
         localThread = new Thread(new Runnable() {
             @Override
             public void run() {

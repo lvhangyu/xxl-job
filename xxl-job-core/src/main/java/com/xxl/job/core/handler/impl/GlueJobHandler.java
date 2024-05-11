@@ -10,7 +10,10 @@ import com.xxl.job.core.handler.IJobHandler;
  */
 public class GlueJobHandler extends IJobHandler {
 
+	//时间
 	private long glueUpdatetime;
+
+	//任务处理者
 	private IJobHandler jobHandler;
 	public GlueJobHandler(IJobHandler jobHandler, long glueUpdatetime) {
 		this.jobHandler = jobHandler;

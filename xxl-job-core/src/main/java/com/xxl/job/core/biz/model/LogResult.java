@@ -3,6 +3,7 @@ package com.xxl.job.core.biz.model;
 import java.io.Serializable;
 
 /**
+ * //日志结果
  * Created by xuxueli on 17/3/23.
  */
 public class LogResult implements Serializable {
@@ -17,9 +18,13 @@ public class LogResult implements Serializable {
         this.isEnd = isEnd;
     }
 
+    //行数
     private int fromLineNum;
+    //目标行数
     private int toLineNum;
+    //日志内容
     private String logContent;
+    //是否结束
     private boolean isEnd;
 
     public int getFromLineNum() {

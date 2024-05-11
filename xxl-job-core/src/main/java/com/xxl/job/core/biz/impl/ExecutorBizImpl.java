@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
+ * biz实现
  * Created by xuxueli on 17/3/1.
  */
 public class ExecutorBizImpl implements ExecutorBiz {
@@ -45,8 +46,9 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
     @Override
     public ReturnT<String> run(TriggerParam triggerParam) {
-        // load old：jobHandler + jobThread
+        // load old：jobHandler + jobThread 任务线程
         JobThread jobThread = XxlJobExecutor.loadJobThread(triggerParam.getJobId());
+        //任务处理者
         IJobHandler jobHandler = jobThread!=null?jobThread.getHandler():null;
         String removeOldReason = null;
 
@@ -150,7 +152,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
     @Override
     public ReturnT<String> kill(KillParam killParam) {
-        // kill handlerThread, and create new one
+        // kill handlerThread, and create new one 停止处理线程
         JobThread jobThread = XxlJobExecutor.loadJobThread(killParam.getJobId());
         if (jobThread != null) {
             XxlJobExecutor.removeJobThread(killParam.getJobId(), "scheduling center kill job.");
@@ -162,7 +164,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
     @Override
     public ReturnT<LogResult> log(LogParam logParam) {
-        // log filename: logPath/yyyy-MM-dd/9999.log
+        // log filename: logPath/yyyy-MM-dd/9999.log  查询日志
         String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logParam.getLogDateTim()), logParam.getLogId());
 
         LogResult logResult = XxlJobFileAppender.readLog(logFileName, logParam.getFromLineNum());

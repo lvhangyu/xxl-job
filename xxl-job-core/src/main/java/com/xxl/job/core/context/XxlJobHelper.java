@@ -12,6 +12,7 @@ import java.io.StringWriter;
 import java.util.Date;
 
 /**
+ * xxl-job助手i
  * helper for xxl-job
  *
  * @author xuxueli 2020-11-05
@@ -94,6 +95,7 @@ public class XxlJobHelper {
         return xxlJobContext.getShardTotal();
     }
 
+    //日志工具
     // ---------------------- tool for log ----------------------
 
     private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
@@ -119,6 +121,7 @@ public class XxlJobHelper {
     }
 
     /**
+     * 追加 异常日志
      * append exception stack
      *
      * @param e
@@ -134,6 +137,7 @@ public class XxlJobHelper {
     }
 
     /**
+     * 追加日志
      * append log
      *
      * @param callInfo
@@ -229,6 +233,7 @@ public class XxlJobHelper {
     }
 
     /**
+     * 设置上下文 消息
      * @param handleCode
      *
      *      200 : success

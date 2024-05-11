@@ -3,6 +3,8 @@ package com.xxl.job.core.handler.annotation;
 import java.lang.annotation.*;
 
 /**
+ *
+ * xxljob注解, 用来声明任务
  * annotation for method jobhandler
  *
  * @author xuxueli 2019-12-11 20:50:13

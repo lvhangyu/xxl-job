@@ -10,13 +10,18 @@ import com.xxl.job.core.util.ScriptUtil;
 import java.io.File;
 
 /**
+ * 脚本任务处理着
  * Created by xuxueli on 17/4/27.
  */
 public class ScriptJobHandler extends IJobHandler {
 
+    //任务id
     private int jobId;
+    //更新时间
     private long glueUpdatetime;
+    //来由
     private String gluesource;
+    //类型
     private GlueTypeEnum glueType;
 
     public ScriptJobHandler(int jobId, long glueUpdatetime, String gluesource, GlueTypeEnum glueType){
@@ -46,7 +51,7 @@ public class ScriptJobHandler extends IJobHandler {
 
     @Override
     public void execute() throws Exception {
-
+        //如果不是脚本
         if (!glueType.isScript()) {
             XxlJobHelper.handleFail("glueType["+ glueType +"] invalid.");
             return;
@@ -55,6 +60,7 @@ public class ScriptJobHandler extends IJobHandler {
         // cmd
         String cmd = glueType.getCmd();
 
+        //脚本文件
         // make script file
         String scriptFileName = XxlJobFileAppender.getGlueSrcPath()
                 .concat(File.separator)
@@ -64,6 +70,7 @@ public class ScriptJobHandler extends IJobHandler {
                 .concat(glueType.getSuffix());
         File scriptFile = new File(scriptFileName);
         if (!scriptFile.exists()) {
+            //标记脚本文件
             ScriptUtil.markScriptFile(scriptFileName, gluesource);
         }
 
